@@ -1,5 +1,14 @@
 # Scala Microservice Template
 
+## ???
+
+1. Read configurations from file or a URI
+    * `"com.typesafe" % "config" % "1.4.0"`
+2. Instantiate all services that are needed to provides features.
+    * It's up to you, the example uses ZIO (`"dev.zio" %% "zio" % "1.0.0-RC17"`)
+3. Create an instance of the structure needed to the server
+    * todo: check which http server use
+   
 ```
 sbt new git@github.com:datalek/scala-microservice-template.g8.git --branch feature/templating
 ```

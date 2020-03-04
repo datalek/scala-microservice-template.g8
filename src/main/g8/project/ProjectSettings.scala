@@ -18,6 +18,9 @@ object ProjectSettings {
     </scm>
   }
 
+  val notToPublish =
+    Seq(skip in sbt.Keys.publish := true)
+
   private lazy val credentialsPath =
     sys.props.get("artifactory.creds")
       .map(s => new File(s))
