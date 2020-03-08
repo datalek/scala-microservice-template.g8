@@ -6,18 +6,23 @@ final case class TenantId(
   value: String
 ) extends AnyVal
 
-final case class ClientId private(
+final case class ClientId(
   value: String
 )
 object ClientId {
-  def apply(tenant: TenantId, id: String): ClientId =
-    ClientId(s"${tenant.value}::$id")
+  def from(tenant: TenantId, segment: String): ClientId =
+    ClientId(s"${tenant.value}::$segment")
 }
 
 final case class ClientDefinition(
+  tenantId: TenantId,
   name: String,
+  owner: Identity,
   scope: Seq[String]
 )
+object ClientDefinition {
+  type PostponeOwnerProvisioning = Identity => ClientDefinition
+}
 
 final case class ClientUpdate(
   name: String,

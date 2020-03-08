@@ -1,6 +1,7 @@
 package io.rakhov.exampleservice.services.events
 
-import io.rakhov.exampleservice.api._
+import io.rakhov.exampleservice.services.clients._
+import io.rakhov.exampleservice.services.authorizations._
 
 final case class EventId(
   value: String
@@ -17,7 +18,9 @@ final case class Event(
   action: Action
 )
 
-sealed trait Action
+sealed trait Action {
+  def date: java.time.Instant
+}
 object Action {
   final case class ClientUpdated(
     client: ClientId,

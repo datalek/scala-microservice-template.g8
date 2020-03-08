@@ -7,24 +7,24 @@ import zio._
 
 object ClientApi {
   trait Service {
-    
+
     def create(
       eventService: Events.Service,
       authorization: Authorization.Bearer,
-      definition: ClientDefinition
-    ): UIO[Either[ClientApiError, Client]]
-    
+      definition: ClientDefinition.PostponeOwnerProvisioning
+    ): UIO[Either[ClientApiError, (Client, Event)]]
+
     def update(
       eventService: Events.Service,
       authorization: Authorization.Bearer,
       clientId: ClientId,
-      definition: ClientUpdate
-    ): UIO[Either[ClientApiError, Client]]
-  
+      update: ClientUpdate
+    ): UIO[Either[ClientApiError, (Client, Event)]]
+
     def detail(
       authorization: Authorization.Bearer,
-      definition: ClientId
+      clientId: ClientId
     ): UIO[Either[ClientApiError, Client]]
-    
+
   }
 }
