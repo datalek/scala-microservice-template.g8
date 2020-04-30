@@ -3,8 +3,11 @@ import ProjectSettings._
 
 lazy val commonSettings = Seq(
   organization := "$organization$",
-  scalaVersion := "2.12.6",
-  crossScalaVersions := Seq("2.11.12", "2.12.6"),
+  scalaVersion := "2.13.2",
+  crossScalaVersions := Seq("2.11.12", "2.12.6", "2.13.2"),
+  scalacOptions ++= Seq(
+    "-Wconf:msg=match may not be exhaustive:error"
+  ),
   coverageEnabled in Test := true,
   resolvers ++= Dependencies.commonResolvers,
   exportJars := true
