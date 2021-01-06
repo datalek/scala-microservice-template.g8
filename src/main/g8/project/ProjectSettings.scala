@@ -1,14 +1,11 @@
 import sbt.Keys._
 import sbt._
-import com.typesafe.sbt.SbtScalariform.autoImport._
-import scalariform.formatter.preferences._
 
 object ProjectSettings {
 
   val common =
     Seq(
-      sbt.Keys.publish := {},
-      scalariformPreferences := scalariformPreferences.value.setPreference(DanglingCloseParenthesis, Force)
+      sbt.Keys.publish := {}
     )
 
   private val pom = {

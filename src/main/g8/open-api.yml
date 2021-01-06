@@ -1,0 +1,183 @@
+openapi: 3.0.0
+info:
+  title: $name$ endpoints
+  description: Descibes the endpoints need to interact with this service.
+  version: $projectVersion$
+servers:
+  - url: http://api.example.com/v1
+    description: Production endpoint
+  - url: http://staging-api.example.com
+    description: Staging endpoint (test environment)
+security:
+  - authorization: []
+paths:
+  /clients:
+    parameters:
+      - \$ref: '#/components/parameters/headerTenantId'
+    post:
+      summary: Create a new client.
+      description: Create a new client from a client definition.
+      operationId: createClient
+      requestBody:
+        \$ref: '#/components/requestBodies/ClientDefinitionRequest'
+      responses:
+        '200':
+          \$ref: '#/components/responses/200ClientResponse'
+        '400':
+          \$ref: '#/components/responses/400BadRequest'
+        '401':
+          \$ref: '#/components/responses/401Unauthorized'
+        '403':
+          \$ref: '#/components/responses/403Forbidden'
+  /clients/:clientId:
+    parameters:
+      - \$ref: '#/components/parameters/headerTenantId'
+      - \$ref: '#/components/parameters/pathClientId'
+    get:
+      summary: Returns a clien details.
+      description: Returns a client detail given the identifier.
+      responses:
+        '200':
+          \$ref: '#/components/responses/200ClientResponse'
+        '400':
+          \$ref: '#/components/responses/400BadRequest'
+        '401':
+          \$ref: '#/components/responses/401Unauthorized'
+        '403':
+          \$ref: '#/components/responses/403Forbidden'
+        '404':
+          \$ref: '#/components/responses/404NotFound'
+    put:
+      summary: Update a client.
+      description: Update a client given the update definition.
+      requestBody:
+        \$ref: '#/components/requestBodies/ClientUpdateRequest'
+      responses:
+        '200':
+          \$ref: '#/components/responses/200ClientResponse'
+        '400':
+          \$ref: '#/components/responses/400BadRequest'
+        '401':
+          \$ref: '#/components/responses/401Unauthorized'
+        '403':
+          \$ref: '#/components/responses/403Forbidden'
+        '404':
+          \$ref: '#/components/responses/404NotFound'
+
+components:
+  securitySchemes:
+    authorization: # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+  parameters:
+    headerTenantId:
+      name: x-tenant-id
+      in: header
+      required: true
+      description: The identifier for the tenant.
+      schema:
+        \$ref: '#/components/schemas/TenantId'
+    pathClientId:
+      name: clientId
+      in: path
+      required: true
+      description: The identifier for the client.
+      schema:
+        \$ref: '#/components/schemas/ClientId'
+  schemas:
+    TenantId:
+      type: string
+    ClientId:
+      type: string
+    ClientDefinition:
+      required:
+        - name
+        - scope
+      properties:
+        name:
+          type: string
+        scope:
+          type: array
+          items:
+            type: string
+    ClientUpdate:
+      required:
+        - name
+        - scope
+      properties:
+        name:
+          type: string
+        scope:
+          type: array
+          items:
+            type: string
+    Client:
+      required:
+        - id
+        - name
+        - owner
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        owner:
+          type: string
+        scope:
+          type: array
+          items:
+            type: string
+    Error:
+      required:
+        - code
+        - message
+        - errors
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+        errors:
+          type: array
+          items:
+            \$ref: '#/components/schemas/Error'
+  requestBodies:
+    ClientDefinitionRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            \$ref: '#/components/schemas/ClientDefinition'
+    ClientUpdateRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            \$ref: '#/components/schemas/ClientUpdate'
+  responses:
+    200ClientResponse:
+      description: A JSON array of user names
+      content:
+        application/json:
+          schema:
+            \$ref: '#/components/schemas/Client'
+    400BadRequest:
+      description: There is some erorr in the input of the request
+      content:
+        application/json:
+          schema:
+            \$ref: '#/components/schemas/Error'
+    401Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            \$ref: '#/components/schemas/Error'
+    403Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            \$ref: '#/components/schemas/Error'
+    404NotFound:
+      description: Not found.
